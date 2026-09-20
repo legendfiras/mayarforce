@@ -33,6 +33,11 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# local scratch
+public/images/**/_preview/
+public/images/**/_candidates/
+public/images/hero-chouf-cedar.jpg
+
 # vercel
 .vercel
 
