@@ -1,12 +1,13 @@
 import Link from "next/link";
 import type { Locale } from "@/i18n";
+import { categoryCopy, categoryIds } from "@/content/products";
 import { navHref, navItems, siteContent } from "@/content/site";
+import { categoryPath } from "@/lib/paths";
 import { Container } from "@/components/Container";
-import { InstagramLink } from "@/components/InstagramLink";
 import { LanguageSwitch } from "@/components/LanguageSwitch";
-import { Logo } from "@/components/Logo";
-import { MapsLink } from "@/components/MapsLink";
-import { WhatsAppLink } from "@/components/WhatsAppLink";
+import { Logo, logoAlt } from "@/components/Logo";
+import { TikTokLink } from "@/components/TikTokLink";
+import { hasText } from "@/lib/text";
 
 type FooterProps = {
   locale: Locale;
@@ -17,54 +18,73 @@ export function Footer({ locale }: FooterProps) {
   const nav = siteContent.nav[locale];
 
   return (
-    <footer className="mt-auto border-t border-[#e8d48b]/20 bg-forest-deep text-cream">
-      <Container className="py-5 md:py-6">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <Link href={`/${locale}`} className="inline-flex items-center gap-2.5">
-            <Logo locale={locale} variant="light" compact showName={false} />
-            <span className="text-sm font-semibold tracking-tight">{siteContent.storeName[locale]}</span>
+    <footer className="mt-auto border-t border-gold/25 bg-forest-deep text-cream">
+      <Container className="grid gap-10 py-12 md:grid-cols-2 lg:grid-cols-4 lg:py-14">
+        <div className="max-w-xs">
+          <Link href={`/${locale}`} aria-label={logoAlt} className="inline-flex">
+            <Logo locale={locale} variant="light" compact presentation="footer" />
           </Link>
-
-          <nav aria-label="Footer" className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.key}
-                href={navHref(item.key, locale)}
-                className="text-xs text-cream/75 transition-colors hover:text-white"
-              >
-                {nav[item.key]}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-1">
-            <MapsLink locale={locale} variant="light" dense />
-            <WhatsAppLink locale={locale} variant="light" compact />
-            <InstagramLink locale={locale} variant="light" compact />
-          </div>
+          <p className="mt-4 text-sm leading-relaxed text-cream/70">{footer.blurb}</p>
         </div>
 
-        <div className="mt-4 flex flex-col gap-2 border-t border-cream/10 pt-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-[11px] tracking-wide text-cream/50">
-            {footer.copyright}
-            <span className="mx-2 text-cream/20" aria-hidden>
-              ·
-            </span>
-            {siteContent.location[locale]}
-          </p>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <a
-              href="https://roytech.solutions"
-              target="_blank"
-              rel="noopener"
-              className="text-[11px] tracking-wide text-cream/50 transition-colors hover:text-[#e8d48b]"
-            >
-              {footer.credit}
-            </a>
-            <LanguageSwitch locale={locale} variant="plain" />
+        <nav aria-label={footer.categories}>
+          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-gold rtl:normal-case rtl:tracking-normal">
+            {footer.categories}
+          </h2>
+          <ul className="mt-4 space-y-2">
+            {categoryIds.map((id) => (
+              <li key={id}>
+                <Link href={categoryPath(locale, id)} className="text-sm text-cream/75 hover:text-gold">
+                  {categoryCopy[id].name[locale]}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <nav aria-label={footer.explore}>
+          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-gold rtl:normal-case rtl:tracking-normal">
+            {footer.explore}
+          </h2>
+          <ul className="mt-4 space-y-2">
+            {navItems.map((item) => (
+              <li key={item.key}>
+                <Link href={navHref(item.key, locale)} className="text-sm text-cream/75 hover:text-gold">
+                  {nav[item.key]}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div>
+          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-gold rtl:normal-case rtl:tracking-normal">
+            {footer.visit}
+          </h2>
+          {hasText(siteContent.location.ar) ? (
+            <p className="mt-4 text-sm leading-relaxed text-cream/80">{siteContent.location.ar}</p>
+          ) : null}
+          {locale === "en" && hasText(siteContent.location.en) ? (
+            <p className="mt-1 text-sm text-cream/55">{siteContent.location.en}</p>
+          ) : null}
+          <div className="mt-3">
+            <TikTokLink locale={locale} variant="light" />
           </div>
         </div>
       </Container>
+
+      <div className="border-t border-cream/10">
+        <Container className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-cream/50">
+            {footer.copyright}
+            <span className="mx-2 text-cream/25" aria-hidden>
+              ·
+            </span>
+            {footer.demo}
+          </p>
+          <LanguageSwitch locale={locale} variant="plain" />
+        </Container>
+      </div>
     </footer>
   );
 }

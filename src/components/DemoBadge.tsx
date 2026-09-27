@@ -9,7 +9,7 @@ type DemoBadgeProps = {
 export function DemoBadge({ locale, className = "" }: DemoBadgeProps) {
   return (
     <span
-      className={`inline-flex items-center rounded-sm bg-accent/10 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-accent ${className}`}
+      className={`inline-flex items-center border border-gold/40 px-1.5 py-0.5 text-[0.65rem] font-medium text-olive ${className}`}
     >
       {siteContent.catalog.demo[locale]}
     </span>

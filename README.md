@@ -1,8 +1,8 @@
-# Issawi Hunting Store
+# MAYAR FORCE — Hunt & Honey
 
-Bilingual product showcase for [Issawi Hunting Store](https://www.instagram.com/issawihuntingstores/) in Saida, Lebanon. English and Arabic. No checkout, prices, or accounts.
+Demonstration website for Mayar Force, a local business in Akkar: hunting clothing, camping accessories, and honey. Arabic is the default language. English is available from the language switch.
 
-Built by [Roytech](https://roytech.solutions).
+There is no checkout. Prices, a phone number, opening hours, and a map pin stay empty until they are added in the business file.
 
 ## Stack
 
@@ -17,25 +17,23 @@ npm install
 npm run dev
 ```
 
-Then open [http://localhost:3000/en](http://localhost:3000/en). Arabic: [http://localhost:3000/ar](http://localhost:3000/ar).
+Arabic: [http://localhost:3000/ar](http://localhost:3000/ar). English: [http://localhost:3000/en](http://localhost:3000/en).
 
 ```bash
 npm run build
 npm start
 ```
 
+The site is marked `noindex` until it is approved for publication.
+
 ## Edit content
 
 | What | Where |
 | --- | --- |
-| Store text, contact, footer | `src/content/site.ts` |
-| Products and brands | `src/content/products.ts` |
-| Photographs | `public/images/` |
+| Name, location, TikTok, WhatsApp, hours, image paths | `src/content/business.ts` |
+| Page copy | `src/content/site.ts` |
+| Demonstration catalog | `src/content/products.ts` |
 
-Use official manufacturer media for branded products. Image sources are listed in `IMAGE_CREDITS.md`.
+Leave `whatsappE164` empty until the number is verified. A product inquiry then opens the contact section and names the product. When a number is set, the same inquiry opens WhatsApp with that product name in the message.
 
-## Contact on the site
-
-- Instagram: [@issawihuntingstores](https://www.instagram.com/issawihuntingstores/)
-- WhatsApp: [03 719 756](https://wa.me/9613719756)
-- Maps: [Saida, Lebanon](https://maps.app.goo.gl/oM9GtK57o4m41CWK8)
+Put photographs in `public` and point to them from `business.images`. Empty paths use the built-in placeholders.

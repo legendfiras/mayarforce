@@ -1,60 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Locale } from "@/i18n";
+import { categoryCopy } from "@/content/products";
 import { siteContent } from "@/content/site";
-import { brandPath, categoryPath } from "@/lib/paths";
-import { DemoBadge } from "@/components/DemoBadge";
-
-type CategoryVisual = {
-  src: string;
-  alt: Record<Locale, string>;
-  fit: "cover" | "contain";
-  position: string;
-  background: string;
-};
-
-const visuals: Record<string, CategoryVisual> = {
-  radikal: {
-    src: "/images/categories/radikal-sax-2.jpg",
-    alt: {
-      en: "Radikal SAX-2 hunting shotgun",
-      ar: "بندقية صيد راديكال SAX-2",
-    },
-    fit: "contain",
-    position: "center",
-    background: "#111111",
-  },
-  aselkon: {
-    src: "/images/categories/aselkon-x3-complete.jpg",
-    alt: {
-      en: "Aselkon X3 Dark Black hunting shotgun",
-      ar: "بندقية صيد أسلكون X3 Dark Black",
-    },
-    fit: "contain",
-    position: "center",
-    background: "#111111",
-  },
-  bme: {
-    src: "/images/categories/bme-cartridges.jpg",
-    alt: {
-      en: "BME Super 12 gauge hunting cartridge box",
-      ar: "علبة خراطيش صيد BME Super عيار 12",
-    },
-    fit: "contain",
-    position: "center",
-    background: "#f6f3ec",
-  },
-  saga: {
-    src: "/images/categories/saga-cartridges.jpg",
-    alt: {
-      en: "Saga Field 12 gauge hunting cartridge box",
-      ar: "علبة خراطيش صيد Saga Field عيار 12",
-    },
-    fit: "contain",
-    position: "center",
-    background: "#f6f3ec",
-  },
-};
+import { categoryPath } from "@/lib/paths";
+import { PlaceholderArt } from "@/components/PlaceholderArt";
 
 type CategoryTilesProps = {
   locale: Locale;
@@ -64,51 +14,43 @@ export function CategoryTiles({ locale }: CategoryTilesProps) {
   const section = siteContent.categories;
 
   return (
-    <section className="py-10 md:py-12">
-      <div className="mb-6 flex items-end justify-between gap-4">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
-            {section.eyebrow[locale]}
-          </p>
-          <h2 className="mt-2 text-2xl font-semibold text-charcoal">{section.heading[locale]}</h2>
-        </div>
+    <section className="py-14 md:py-20">
+      <div className="max-w-2xl">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold rtl:normal-case rtl:tracking-normal">
+          {section.eyebrow[locale]}
+        </p>
+        <h2 className="mt-3 text-3xl font-semibold text-charcoal md:text-4xl">{section.heading[locale]}</h2>
       </div>
-      <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <ul className="mt-8 grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
         {section.items.map((item) => {
-          const href =
-            item.kind === "brand"
-              ? brandPath(locale, item.hrefKey)
-              : categoryPath(locale, item.hrefKey);
-          const visual = visuals[item.id];
-          if (!visual) return null;
+          const copy = categoryCopy[item.id];
           return (
             <li key={item.id}>
               <Link
-                href={href}
-                className="group flex h-full flex-col border border-line bg-white transition-colors duration-200 hover:border-forest/40"
+                href={categoryPath(locale, item.id)}
+                className="group relative flex min-h-52 flex-col justify-end overflow-hidden bg-forest-deep sm:min-h-72"
               >
-                <div
-                  className="relative aspect-[5/4] overflow-hidden"
-                  style={{ backgroundColor: visual.background }}
-                >
+                {copy.image ? (
                   <Image
-                    src={visual.src}
-                    alt={visual.alt[locale]}
+                    src={copy.image}
+                    alt=""
                     fill
-                    sizes="(min-width: 640px) 22vw, 50vw"
-                    priority
-                    className={`transition-transform duration-300 ease-out group-hover:scale-105 ${
-                      visual.fit === "contain" ? "object-contain p-2 sm:p-2.5" : "object-cover"
-                    }`}
-                    style={{ objectPosition: visual.position }}
+                    sizes="(min-width: 1024px) 22vw, 50vw"
+                    className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
                   />
-                </div>
-                <div className="flex flex-1 flex-col gap-2 px-3 py-3">
-                  <span className="text-sm font-semibold leading-snug text-charcoal group-hover:text-forest">
-                    {item.name[locale]}
-                  </span>
-                  {item.isDemo ? <DemoBadge locale={locale} /> : null}
-                </div>
+                ) : (
+                  <PlaceholderArt
+                    kind={copy.placeholder}
+                    className="absolute inset-0 h-full w-full transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+                  />
+                )}
+                <span
+                  aria-hidden
+                  className="absolute inset-0 bg-gradient-to-t from-forest-deep via-forest-deep/20 to-transparent"
+                />
+                <span className="relative z-10 p-4 text-base font-semibold text-cream sm:p-5 sm:text-lg">
+                  {copy.name[locale]}
+                </span>
               </Link>
             </li>
           );

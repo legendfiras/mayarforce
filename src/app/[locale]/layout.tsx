@@ -32,6 +32,7 @@ export async function generateMetadata({
       template: `%s | ${siteContent.storeName[locale]}`,
     },
     description: meta.description,
+    robots: { index: false, follow: false },
     alternates: {
       canonical: `/${locale}`,
       languages: {
@@ -45,6 +46,20 @@ export async function generateMetadata({
       locale: locale === "ar" ? "ar_LB" : "en_US",
       type: "website",
       siteName: siteContent.storeName.en,
+      images: [
+        {
+          url: "/images/mayar/hero-banner.jpg",
+          width: 1024,
+          height: 576,
+          alt: "Mayar Force — Hunt & Honey",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: meta.title,
+      description: meta.description,
+      images: ["/images/mayar/hero-banner.jpg"],
     },
   };
 }

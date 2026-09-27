@@ -1,28 +1,34 @@
-import { siteContent } from "@/content/site";
+import { isWhatsAppConfigured } from "@/content/business";
+import { whatsappHref, whatsappLabel } from "@/lib/inquiry";
 import type { Locale } from "@/i18n";
 
 type WhatsAppLinkProps = {
   locale: Locale;
   variant?: "light" | "dark";
   compact?: boolean;
+  text?: string;
 };
 
-export function WhatsAppLink({ locale, variant = "dark", compact = false }: WhatsAppLinkProps) {
+export function WhatsAppLink({ locale, variant = "dark", compact = false, text }: WhatsAppLinkProps) {
+  if (!isWhatsAppConfigured()) return null;
+  const href = whatsappHref(text);
+  if (!href) return null;
+
   const light = variant === "light";
-  const copy = siteContent.whatsapp;
+  const copy = whatsappLabel(locale);
 
   return (
     <a
-      href={copy.url}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       className={
         compact
-          ? `inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
-              light ? "text-cream hover:bg-white/10 hover:text-white" : "text-forest hover:bg-forest/10 hover:text-accent"
+          ? `inline-flex h-11 w-11 items-center justify-center transition-colors ${
+              light ? "text-cream hover:text-gold" : "text-forest hover:text-gold"
             }`
           : `inline-flex min-h-11 items-center gap-3 py-1 text-sm transition-colors ${
-              light ? "text-cream/80 hover:text-white" : "text-charcoal hover:text-forest"
+              light ? "text-cream/85 hover:text-gold" : "text-charcoal hover:text-forest"
             }`
       }
     >
@@ -31,12 +37,11 @@ export function WhatsAppLink({ locale, variant = "dark", compact = false }: What
       </svg>
       {compact ? (
         <span className="sr-only">
-          {copy.label[locale]} {copy.display}
+          {copy.name} {copy.display}
         </span>
       ) : (
         <span>
-          {copy.label[locale]}{" "}
-          <span dir="ltr">{copy.display}</span>
+          {copy.name} {copy.display ? <span dir="ltr">{copy.display}</span> : null}
         </span>
       )}
     </a>

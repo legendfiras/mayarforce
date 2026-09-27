@@ -5,13 +5,11 @@ import { Suspense, useEffect, useId, useState } from "react";
 import { usePathname } from "next/navigation";
 import type { Locale } from "@/i18n";
 import { navHref, navItems, siteContent } from "@/content/site";
-import { aboutPath } from "@/lib/paths";
 import { Container } from "@/components/Container";
-import { InstagramLink } from "@/components/InstagramLink";
 import { LanguageSwitch } from "@/components/LanguageSwitch";
-import { Logo } from "@/components/Logo";
+import { Logo, logoAlt } from "@/components/Logo";
 import { SearchField } from "@/components/SearchField";
-import { WhatsAppLink } from "@/components/WhatsAppLink";
+import { useCart } from "@/components/CartProvider";
 
 type HeaderProps = {
   locale: Locale;
@@ -27,9 +25,11 @@ export function Header({ locale }: HeaderProps) {
 
 function HeaderShell({ locale }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-ivory">
-      <Container className="flex h-16 items-center justify-between gap-4">
-        <Logo locale={locale} compact />
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-forest-deep">
+      <Container className="flex min-h-16 items-center py-2">
+        <Link href={`/${locale}`} aria-label={logoAlt}>
+          <Logo locale={locale} variant="light" compact />
+        </Link>
       </Container>
     </header>
   );
@@ -37,13 +37,24 @@ function HeaderShell({ locale }: HeaderProps) {
 
 function HeaderInner({ locale }: HeaderProps) {
   const [open, setOpen] = useState(false);
+  const [hash, setHash] = useState("");
   const panelId = useId();
   const pathname = usePathname() || `/${locale}`;
+  const [menuKey, setMenuKey] = useState(`${pathname}${hash}`);
   const copy = siteContent.header[locale];
   const nav = siteContent.nav[locale];
+  const nextMenuKey = `${pathname}${hash}`;
+
+  if (menuKey !== nextMenuKey) {
+    setMenuKey(nextMenuKey);
+    setOpen(false);
+  }
 
   useEffect(() => {
-    setOpen(false);
+    const read = () => setHash(window.location.hash);
+    read();
+    window.addEventListener("hashchange", read);
+    return () => window.removeEventListener("hashchange", read);
   }, [pathname]);
 
   useEffect(() => {
@@ -61,79 +72,112 @@ function HeaderInner({ locale }: HeaderProps) {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-ivory">
-      <Container className="flex flex-col gap-3 py-3 lg:py-3">
-        <div className="flex items-center gap-3 lg:gap-6">
-          <Link href={`/${locale}`} className="min-w-0 shrink-0">
-            <Logo locale={locale} compact priority />
-          </Link>
-          <div className="hidden min-w-0 flex-1 lg:block">
-            <SearchField locale={locale} />
-          </div>
-          <div className="ms-auto flex items-center gap-2 sm:gap-3">
-            <Link
-              href={aboutPath(locale)}
-              className="hidden min-h-10 items-center text-sm font-medium text-forest hover:text-accent sm:inline-flex"
-            >
-              {copy.contact}
-            </Link>
-            <WhatsAppLink locale={locale} compact />
-            <InstagramLink locale={locale} compact />
-            <LanguageSwitch locale={locale} />
-            <button
-              type="button"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line text-charcoal transition-colors hover:border-forest hover:text-forest lg:hidden"
-              aria-expanded={open}
-              aria-controls={panelId}
-              onClick={() => setOpen((value) => !value)}
-            >
-              <span className="sr-only">{open ? copy.closeMenu : copy.openMenu}</span>
-              <span className="flex w-5 flex-col gap-1.5" aria-hidden="true">
-                <span className="block h-px w-full bg-charcoal" />
-                <span className="block h-px w-full bg-charcoal" />
-                <span className="block h-px w-full bg-charcoal" />
-              </span>
-            </button>
-          </div>
-        </div>
-        <div className="lg:hidden">
-          <SearchField locale={locale} />
-        </div>
-      </Container>
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-forest-deep/95 text-cream backdrop-blur-md">
+      <Container className="flex min-h-16 items-center gap-2 py-2 sm:gap-3 lg:min-h-[4.5rem] lg:gap-6">
+        <Link href={`/${locale}`} aria-label={logoAlt} className="min-w-0 shrink-0">
+          <Logo locale={locale} variant="light" compact priority />
+        </Link>
 
-      <nav className="hidden bg-forest text-cream lg:block" aria-label="Primary">
-        <Container className="flex flex-wrap items-center gap-x-6 gap-y-1 py-2.5">
+        <nav className="ms-2 hidden items-center gap-6 lg:flex" aria-label="Primary">
           {navItems.map((item) => {
-            const active = item.match(pathname, locale);
+            const active = item.match(pathname, locale, hash);
             return (
               <Link
                 key={item.key}
                 href={navHref(item.key, locale)}
-                className={`py-1 text-sm font-medium ${
-                  active ? "text-white underline decoration-accent decoration-2 underline-offset-4" : "text-cream/90 hover:text-white"
+                aria-current={active ? "page" : undefined}
+                className={`text-sm font-medium ${
+                  active ? "text-gold" : "text-cream/80 hover:text-cream"
                 }`}
               >
                 {nav[item.key]}
               </Link>
             );
           })}
-        </Container>
-      </nav>
+        </nav>
 
-      <div id={panelId} hidden={!open} className="border-t border-line bg-white lg:hidden">
-        <Container className="flex flex-col py-4">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-accent">{copy.menu}</p>
-          {navItems.map((item) => (
-            <Link
-              key={item.key}
-              href={navHref(item.key, locale)}
-              className="min-h-12 py-3 text-base text-charcoal"
-            >
-              {nav[item.key]}
-            </Link>
-          ))}
+        <div className="ms-auto hidden min-w-0 flex-1 lg:block lg:max-w-xs">
+          <SearchField locale={locale} tone="dark" id="search-desktop" />
+        </div>
+
+        <div className="ms-auto flex items-center gap-1.5 sm:gap-2 lg:ms-0">
+          <CartButton locale={locale} onOpen={() => setOpen(false)} />
+          <LanguageSwitch locale={locale} variant="light" />
+          <Link
+            href={navHref("contact", locale)}
+            className="hidden min-h-11 items-center bg-gold px-3 text-sm font-semibold text-charcoal transition-colors hover:bg-gold-bright sm:inline-flex sm:px-4"
+          >
+            <span className="sm:hidden">{copy.contactShort}</span>
+            <span className="hidden sm:inline">{copy.contact}</span>
+          </Link>
+          <button
+            type="button"
+            className="inline-flex h-11 w-11 items-center justify-center border border-cream/20 text-cream lg:hidden"
+            aria-expanded={open}
+            aria-controls={panelId}
+            onClick={() => setOpen((value) => !value)}
+          >
+            <span className="sr-only">{open ? copy.closeMenu : copy.openMenu}</span>
+            <span className="flex w-5 flex-col gap-1.5" aria-hidden="true">
+              <span className={`block h-px w-full bg-cream transition-transform ${open ? "translate-y-[3.5px] rotate-45" : ""}`} />
+              <span className={`block h-px w-full bg-cream ${open ? "opacity-0" : ""}`} />
+              <span className={`block h-px w-full bg-cream transition-transform ${open ? "-translate-y-[3.5px] -rotate-45" : ""}`} />
+            </span>
+          </button>
+        </div>
+      </Container>
+
+      <div id={panelId} hidden={!open} className="border-t border-white/10 bg-forest-deep lg:hidden">
+        <Container className="flex flex-col gap-2 py-4">
+          <SearchField locale={locale} tone="dark" id="search-menu" />
+          <nav aria-label="Primary" className="mt-2 flex flex-col">
+            {navItems.map((item) => {
+              const active = item.match(pathname, locale, hash);
+              return (
+                <Link
+                  key={item.key}
+                  href={navHref(item.key, locale)}
+                  aria-current={active ? "page" : undefined}
+                  className={`min-h-12 py-3 text-base ${active ? "text-gold" : "text-cream"}`}
+                >
+                  {nav[item.key]}
+                </Link>
+              );
+            })}
+          </nav>
         </Container>
       </div>
     </header>
+  );
+}
+
+function CartButton({ locale, onOpen }: { locale: Locale; onOpen: () => void }) {
+  const { count, openCart } = useCart();
+  const copy = siteContent.cart;
+  const label = count > 0 ? `${copy.open[locale]} (${count})` : copy.open[locale];
+
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        onOpen();
+        openCart();
+      }}
+      aria-label={label}
+      className="relative inline-flex h-11 w-11 items-center justify-center border border-cream/20 text-cream"
+    >
+      <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.6">
+        <path d="M6 7h12l-1 13H7L6 7Z" />
+        <path d="M9 7a3 3 0 0 1 6 0" />
+      </svg>
+      {count > 0 ? (
+        <span
+          className="absolute -top-1.5 -end-1.5 flex h-5 min-w-5 items-center justify-center bg-gold px-1 text-[0.65rem] font-semibold text-charcoal"
+          dir="ltr"
+        >
+          {count > 99 ? "99+" : count}
+        </span>
+      ) : null}
+    </button>
   );
 }

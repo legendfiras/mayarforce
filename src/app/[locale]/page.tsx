@@ -1,13 +1,14 @@
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/i18n";
+import { business } from "@/content/business";
 import { siteContent } from "@/content/site";
-import { getFeaturedProducts, getProductsByBrand } from "@/content/products";
-import { BrandSection } from "@/components/BrandSection";
-import { CampaignBanner } from "@/components/CampaignBanner";
-import { CategoryTiles } from "@/components/CategoryTiles";
+import { getHuntingProducts, getMoreProducts } from "@/content/products";
+import { BrandStory } from "@/components/BrandStory";
+import { ContactBand } from "@/components/ContactBand";
 import { Container } from "@/components/Container";
+import { Hero } from "@/components/Hero";
 import { ProductGrid } from "@/components/ProductGrid";
-import { StoreIdentity } from "@/components/StoreIdentity";
+import { SocialCards } from "@/components/SocialCards";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -17,51 +18,63 @@ export default async function HomePage({ params }: PageProps) {
   const { locale: raw } = await params;
   if (!isLocale(raw)) notFound();
   const locale: Locale = raw;
+  const hunting = getHuntingProducts();
+  const more = getMoreProducts();
 
-  const jsonLd = {
+  const jsonLd: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Store",
-    name: siteContent.storeName.en,
-    alternateName: siteContent.storeName.ar,
-    telephone: "+9613719756",
-    hasMap: siteContent.maps.url,
-    sameAs: [siteContent.instagram.url],
+    name: business.legalName.en,
+    alternateName: business.legalName.ar,
+    description: siteContent.meta.en.description,
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Saida",
+      streetAddress: business.location.ar,
       addressCountry: "LB",
     },
+    sameAs: [business.tiktok.url],
   };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <CampaignBanner locale={locale} />
-      <Container>
-        <CategoryTiles locale={locale} />
-        <section className="pb-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
-            {siteContent.featured.eyebrow[locale]}
-          </p>
-          <h2 className="mt-2 text-2xl font-semibold text-charcoal">
-            {siteContent.featured.heading[locale]}
-          </h2>
-          <p className="mt-3 mb-6 max-w-2xl text-sm text-moss md:text-base">
-            {siteContent.featured.intro[locale]}
-          </p>
-          <ProductGrid products={getFeaturedProducts()} locale={locale} priorityCount={4} />
-        </section>
-        <div id="brands">
-          <BrandSection locale={locale} brand="radikal" products={getProductsByBrand("radikal")} />
-          <BrandSection locale={locale} brand="aselkon" products={getProductsByBrand("aselkon")} />
-          <BrandSection locale={locale} brand="bme" products={getProductsByBrand("bme")} />
-          <BrandSection locale={locale} brand="saga" products={getProductsByBrand("saga")} />
-        </div>
-        <StoreIdentity locale={locale} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <Hero locale={locale} />
+      <Container className="py-10 md:py-14">
+        {hunting.length > 0 ? (
+          <section>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold rtl:normal-case rtl:tracking-normal">
+              {siteContent.featured.eyebrow[locale]}
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold text-charcoal md:text-4xl">
+              {siteContent.featured.heading[locale]}
+            </h2>
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-moss md:text-base">
+              {siteContent.featured.intro[locale]}
+            </p>
+            <p className="mt-3 max-w-2xl text-sm font-medium text-olive">{siteContent.catalog.priceNote[locale]}</p>
+            {hunting.some((item) => item.sample) ? (
+              <p className="mt-2 text-sm font-medium text-olive">{siteContent.catalog.sampleNotice[locale]}</p>
+            ) : null}
+            <div className="mt-8">
+              <ProductGrid products={hunting} locale={locale} priorityCount={4} />
+            </div>
+          </section>
+        ) : null}
+        {more.length > 0 ? (
+          <section className="mt-14 md:mt-20">
+            <h2 className="text-3xl font-semibold text-charcoal md:text-4xl">{siteContent.featured.moreHeading[locale]}</h2>
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-moss md:text-base">
+              {siteContent.featured.moreIntro[locale]}
+            </p>
+            <div className="mt-8">
+              <ProductGrid products={more} locale={locale} />
+            </div>
+          </section>
+        ) : null}
       </Container>
+      <BrandStory locale={locale} />
+      <SocialCards locale={locale} />
+      <ContactBand locale={locale} />
     </>
   );
 }

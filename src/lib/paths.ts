@@ -19,10 +19,6 @@ export function productPath(locale: Locale, slug: string) {
   return `/${locale}/products/${slug}`;
 }
 
-export function brandPath(locale: Locale, brand: string) {
-  return `/${locale}/brands/${brand}`;
-}
-
 export function categoryPath(locale: Locale, category: string) {
   return `/${locale}/categories/${category}`;
 }
@@ -31,14 +27,6 @@ export function aboutPath(locale: Locale) {
   return `/${locale}/about`;
 }
 
-export function catalogHref(
-  locale: Locale,
-  options: {
-    brand?: string;
-    category?: string;
-  } = {},
-) {
-  if (options.brand) return brandPath(locale, options.brand);
-  if (options.category) return categoryPath(locale, options.category);
-  return productsPath(locale);
+export function contactPath(locale: Locale) {
+  return `${aboutPath(locale)}#contact`;
 }

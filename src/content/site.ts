@@ -1,57 +1,33 @@
 import type { Locale } from "@/i18n";
-import type { BrandId, CategoryId } from "@/content/products";
+import { business } from "@/content/business";
+import type { CategoryId } from "@/content/products";
 
-export type NavKey =
-  | "home"
-  | "products"
-  | "radikal"
-  | "aselkon"
-  | "bme"
-  | "saga"
-  | "about";
+export type NavKey = "home" | "products" | "about" | "contact";
 
 export const siteContent = {
+  brand: business.brand,
+  legalName: business.legalName,
+  tagline: business.tagline,
   storeName: {
-    en: "Issawi Hunting Store",
-    ar: "متجر العيسوي للصيد",
+    en: business.legalName.en,
+    ar: business.legalName.ar,
   },
-  location: {
-    en: "Saida, Lebanon",
-    ar: "صيدا، لبنان",
-  },
-  instagram: {
-    handle: "@issawihuntingstores",
-    url: "https://www.instagram.com/issawihuntingstores/",
-    label: {
-      en: "Instagram",
-      ar: "إنستغرام",
-    },
-  },
-  whatsapp: {
-    display: "03 719 756",
-    url: "https://wa.me/9613719756",
-    label: {
-      en: "WhatsApp",
-      ar: "واتساب",
-    },
-  },
-  maps: {
-    url: "https://maps.app.goo.gl/oM9GtK57o4m41CWK8",
-    label: {
-      en: "Open in Google Maps",
-      ar: "افتح في خرائط Google",
-    },
+  location: business.location,
+  tiktok: {
+    handle: business.tiktok.handle,
+    url: business.tiktok.url,
+    label: { en: "TikTok", ar: "تيك توك" },
   },
   meta: {
     en: {
-      title: "Issawi Hunting Store | Hunting & Outdoor, Saida",
+      title: "MAYAR FORCE | Hunt & Honey",
       description:
-        "Issawi Hunting Store in Saida, Lebanon. Browse Radikal, Aselkon, BME and Saga cartridges. Ask in store or on Instagram.",
+        "Demonstration site for Mayar Force in Akkar: hunting clothing, camping accessories, and honey. Sample prices, no payment.",
     },
     ar: {
-      title: "متجر العيسوي للصيد | صيد ومعدات برّ، صيدا",
+      title: "مؤسسة ميار فورس | هانت آند هاني",
       description:
-        "متجر العيسوي للصيد في صيدا، لبنان. تصفّح راديكال وأسلكون وخراطيش BME وSaga. اسأل في المتجر أو على إنستغرام.",
+        "نسخة عرض لمؤسسة ميار فورس في عكار: ملابس صيد، لوازم تخييم وعسل. أسعار عيّنة، ومن دون دفع.",
     },
   },
   skipToContent: {
@@ -65,21 +41,15 @@ export const siteContent = {
   nav: {
     en: {
       home: "Home",
-      products: "All Products",
-      radikal: "Radikal",
-      aselkon: "Aselkon",
-      bme: "BME",
-      saga: "Saga",
-      about: "About & Contact",
+      products: "Products",
+      about: "About",
+      contact: "Contact",
     },
     ar: {
       home: "الرئيسية",
-      products: "كل المنتجات",
-      radikal: "راديكال",
-      aselkon: "أسلكون",
-      bme: "BME",
-      saga: "Saga",
-      about: "عن المتجر والتواصل",
+      products: "المنتجات",
+      about: "عن المؤسسة",
+      contact: "تواصل",
     },
   },
   header: {
@@ -87,178 +57,274 @@ export const siteContent = {
       openMenu: "Open menu",
       closeMenu: "Close menu",
       menu: "Menu",
-      contact: "Contact",
-      searchLabel: "Search",
-      searchPlaceholder: "Search products, brands, and cartridges",
+      contact: "Contact us",
+      contactShort: "Contact",
+      searchLabel: "Search products",
+      searchPlaceholder: "Search clothing, camping, honey",
     },
     ar: {
       openMenu: "فتح القائمة",
       closeMenu: "إغلاق القائمة",
       menu: "القائمة",
-      contact: "تواصل",
-      searchLabel: "بحث",
-      searchPlaceholder: "ابحث عن منتجات، علامات، وخراطيش",
+      contact: "تواصل معنا",
+      contactShort: "تواصل",
+      searchLabel: "البحث في المنتجات",
+      searchPlaceholder: "ابحث في الملابس والتخييم والعسل",
     },
   },
   banner: {
     heading: {
-      en: "Hunting & Outdoor Essentials",
-      ar: "أساسيات الصيد والبرّ",
+      en: "Ready for every outing",
+      ar: "جاهز لكل طلعة",
     },
     text: {
-      en: "Explore Radikal and Aselkon shotguns, plus BME and Saga hunting cartridges.",
-      ar: "استكشف بنادق راديكال وأسلكون، وخراطيش صيد BME وSaga.",
+      en: "Hunting clothing, camping gear, and honey — explore the Mayar Force range.",
+      ar: "ملابس صيد، لوازم تخييم وعسل — اكتشف مجموعة ميار فورس.",
     },
     exploreProducts: {
-      en: "Explore Products",
-      ar: "استكشف المنتجات",
+      en: "Browse products",
+      ar: "تصفّح المنتجات",
     },
-    exploreBrands: {
-      en: "Explore Brands",
-      ar: "استكشف العلامات",
+    contact: {
+      en: "Contact us",
+      ar: "تواصل معنا",
     },
     imageAlt: {
-      en: "Hunter on a Lebanese hillside at sunset, overlooking the coast with the Lebanese flag",
-      ar: "صياد على تلة لبنانية عند الغروب يطل على الساحل مع العلم اللبناني",
+      en: "Mayar Force banner with the circular logo and the owner in hunting clothing, in the mountains",
+      ar: "لافتة ميار فورس مع الشعار الدائري وصاحب المؤسسة بملابس الصيد في الجبال",
     },
   },
   categories: {
-    eyebrow: { en: "Browse", ar: "تصفّح" },
+    eyebrow: { en: "The range", ar: "المجموعة" },
     heading: { en: "Shop by category", ar: "تسوق حسب القسم" },
     items: [
-      {
-        id: "radikal",
-        kind: "brand" as const,
-        hrefKey: "radikal" as const,
-        name: { en: "Radikal Collection", ar: "مجموعة راديكال" },
-        isDemo: false,
-      },
-      {
-        id: "aselkon",
-        kind: "brand" as const,
-        hrefKey: "aselkon" as const,
-        name: { en: "Aselkon Collection", ar: "مجموعة أسلكون" },
-        isDemo: false,
-      },
-      {
-        id: "bme",
-        kind: "brand" as const,
-        hrefKey: "bme" as const,
-        name: { en: "BME Cartridges", ar: "خراطيش BME" },
-        isDemo: false,
-      },
-      {
-        id: "saga",
-        kind: "brand" as const,
-        hrefKey: "saga" as const,
-        name: { en: "Saga Cartridges", ar: "خراطيش Saga" },
-        isDemo: false,
-      },
+      { id: "clothing" as CategoryId },
+      { id: "camping" as CategoryId },
+      { id: "lighting" as CategoryId },
+      { id: "optics" as CategoryId },
+      { id: "rifles" as CategoryId },
+      { id: "cartridges" as CategoryId },
     ],
   },
   featured: {
-    eyebrow: { en: "Catalog", ar: "الكتالوج" },
+    eyebrow: { en: "Selection", ar: "مختارات" },
     heading: { en: "Featured products", ar: "منتجات مختارة" },
     intro: {
-      en: "A short selection of shotguns and hunting cartridges from the shop floor.",
-      ar: "مجموعة قصيرة من البنادق وخراطيش الصيد من أرضية المتجر.",
+      en: "Hunting shotguns and cartridges, with sample prices you can add to the cart.",
+      ar: "بنادق صيد وخراطيش، بأسعار عيّنة يمكن إضافتها إلى السلة.",
     },
+    moreHeading: { en: "More products", ar: "منتجات أخرى" },
+    moreIntro: {
+      en: "Clothing, camping, lighting, and optics from the sample catalog.",
+      ar: "ملابس وتخييم وإضاءة وبصريات من كتالوج العيّنات.",
+    },
+    ask: { en: "Ask for the price", ar: "استفسر عن السعر" },
   },
   identity: {
-    eyebrow: { en: "The store", ar: "المتجر" },
-    heading: { en: "Issawi Hunting Store", ar: "متجر العيسوي للصيد" },
+    eyebrow: { en: "The business", ar: "المؤسسة" },
+    heading: {
+      en: "A local range for the outdoors, and for honey",
+      ar: "مجموعة محلية للطلعات والعسل",
+    },
     paragraphs: {
       en: [
-        "Issawi Hunting Store is a hunting shop in Saida, Lebanon. We present Radikal and Aselkon hunting shotguns, and BME and Saga cartridges, from the shop floor.",
-        "This website is a product showcase — not an online checkout. Message us on WhatsApp or Instagram, or visit the shop in Saida to ask what is available.",
+        "Mayar Force is a local business in Akkar, on the Halba–Qobayat road in Al-Dawsa. The range brings together hunting clothing, camping accessories, lighting, and honey.",
+        "The owner appears in the TikTok page, alongside the outings and the products. This website is a demonstration of that range.",
       ],
       ar: [
-        "متجر العيسوي للصيد محل صيد في صيدا، لبنان. نقدّم بنادق صيد راديكال وأسلكون، وخراطيش BME وSaga، والبيع من أرضية المتجر.",
-        "هذا الموقع واجهة للمنتجات وليس دفعًا عبر الإنترنت. راسلنا على واتساب أو إنستغرام، أو زر المتجر في صيدا للسؤال عما هو متوفر.",
+        "مؤسسة ميار فورس تعمل من عكار، في الدوسة على طريق عام حلبا–القبيات. تجمع المجموعة ملابس الصيد مع لوازم التخييم والإضاءة والعسل.",
+        "صاحب المؤسسة يظهر في صفحة تيك توك إلى جانب الطلعات والمنتجات. هذا الموقع نسخة عرض لتلك المجموعة.",
       ],
     },
+    ownerAlt: {
+      en: "Portrait placeholder for the person behind Mayar Force",
+      ar: "موضع صورة صاحب مؤسسة ميار فورس",
+    },
+    ownerPending: {
+      en: "The owner appears on the TikTok page.",
+      ar: "صاحب المؤسسة يظهر في صفحة تيك توك.",
+    },
+  },
+  social: {
+    eyebrow: { en: "TikTok", ar: "تيك توك" },
+    heading: { en: "From our page", ar: "من صفحتنا" },
+    intro: {
+      en: "Notes from the Mayar Force page. Each card opens the TikTok profile.",
+      ar: "إشارات من صفحة ميار فورس. كل بطاقة تفتح حساب تيك توك.",
+    },
+    open: { en: "Open the TikTok page", ar: "افتح الصفحة على تيك توك" },
+    cards: [
+      {
+        id: "clothing",
+        image: "/images/products/sea-to-summit-ultra-sil-nano-poncho-lime.webp",
+        title: { en: "Hunting clothing", ar: "ملابس الصيد" },
+        text: {
+          en: "Camouflage clothing and outdoor wear, as shared on the page.",
+          ar: "ملابس التمويه والملابس الخارجية كما تُعرض في الصفحة.",
+        },
+      },
+      {
+        id: "camping",
+        image: "/images/covers/camping-chair.jpg",
+        title: { en: "Camping and light", ar: "التخييم والإضاءة" },
+        text: {
+          en: "Camping accessories and lighting from the outings on the page.",
+          ar: "لوازم التخييم والإضاءة من طلعات الصفحة.",
+        },
+      },
+      {
+        id: "honey",
+        image: "/images/covers/honey-jar.jpg",
+        title: { en: "Honey", ar: "العسل" },
+        text: {
+          en: "Honey, shown alongside the outdoor range on the page.",
+          ar: "العسل، إلى جانب مجموعة الطلعات في الصفحة.",
+        },
+        credit: {
+          en: "Photograph by Davide Vizzini, CC BY 2.0",
+          ar: "صورة Davide Vizzini، ترخيص CC BY 2.0",
+        },
+      },
+    ],
+  },
+  contact: {
+    eyebrow: { en: "Visit", ar: "الزيارة" },
+    heading: { en: "Find Mayar Force", ar: "عنوان ميار فورس" },
+    locationLabel: { en: "Location", ar: "الموقع" },
+    reach: {
+      en: "Reach the business on TikTok, or visit the address above.",
+      ar: "للتواصل، افتحوا صفحة تيك توك أو زوروا العنوان أعلاه.",
+    },
+    inquiryAbout: { en: "Asking about", ar: "الاستفسار عن" },
+    mapLabel: { en: "Open the map", ar: "افتح الخريطة" },
   },
   catalog: {
-    allHeading: { en: "All products", ar: "كل المنتجات" },
+    allHeading: { en: "Products", ar: "المنتجات" },
     allIntro: {
-      en: "Search the showcase and filter by brand or category.",
-      ar: "ابحث في الواجهة وصفِّ حسب العلامة أو القسم.",
+      en: "Search the demonstration catalog and filter by category. Prices below are sample figures.",
+      ar: "ابحث في كتالوج العرض وصفِّ حسب القسم. الأسعار أدناه أرقام عيّنة.",
     },
-    filters: { en: "Filters", ar: "تصفية" },
-    brand: { en: "Brand", ar: "العلامة" },
+    priceNote: {
+      en: "Sample prices for this demonstration. They are not Mayar Force prices.",
+      ar: "أسعار عيّنة لهذا العرض. ليست أسعار ميار فورس.",
+    },
+    filters: { en: "Filter", ar: "تصفية" },
     category: { en: "Category", ar: "القسم" },
-    allBrands: { en: "All brands", ar: "كل العلامات" },
     allCategories: { en: "All categories", ar: "كل الأقسام" },
-    storeSelection: { en: "Store selection", ar: "اختيار المتجر" },
     clear: { en: "Clear all", ar: "مسح الكل" },
     results: {
       en: (count: number) => (count === 1 ? "1 product" : `${count} products`),
-      ar: (count: number) => (count === 1 ? "منتج واحد" : `${count} منتجات`),
+      ar: (count: number) => {
+        if (count === 0) return "لا توجد منتجات";
+        if (count === 1) return "منتج واحد";
+        if (count === 2) return "منتجان";
+        if (count <= 10) return `${count} منتجات`;
+        return `${count} منتجًا`;
+      },
     },
     empty: {
-      en: "No products match these filters. Try another brand, category, or search term.",
-      ar: "لا توجد منتجات مطابقة. جرّب علامة أو قسمًا أو كلمة بحث أخرى.",
+      en: "No products match this search. Try another category or a different word.",
+      ar: "لا توجد منتجات مطابقة. جرّب قسمًا آخر أو كلمة مختلفة.",
     },
-    viewDetails: { en: "View Details", ar: "عرض التفاصيل" },
-    demo: { en: "Demonstration", ar: "توضيحي" },
-    explore: { en: "Explore", ar: "استكشف" },
-    related: { en: "Related products", ar: "منتجات ذات صلة" },
+    viewDetails: { en: "View details", ar: "عرض التفاصيل" },
+    demo: { en: "Demo", ar: "عيّنة" },
+    related: { en: "More from the range", ar: "من المجموعة أيضًا" },
+    ask: { en: "Ask for the price", ar: "استفسر عن السعر" },
+    sampleNotice: {
+      en: "Sample catalog — not Mayar Force stock.",
+      ar: "كتالوج عيّنات — ليست من مخزون ميار فورس.",
+    },
+    brand: { en: "Brand", ar: "العلامة" },
     specifications: { en: "Specifications", ar: "المواصفات" },
-    ask: { en: "Ask in store, on WhatsApp, or on Instagram", ar: "اسأل في المتجر أو على واتساب أو إنستغرام" },
-    openFilters: { en: "Open filters", ar: "فتح التصفية" },
-    closeFilters: { en: "Close filters", ar: "إغلاق التصفية" },
+    source: { en: "Manufacturer page", ar: "صفحة الشركة المصنّعة" },
+    photoCredit: {
+      en: "Product photograph from the manufacturer page. Permission to reuse it has not been verified.",
+      ar: "صورة المنتج من صفحة الشركة المصنّعة. لم يُؤكَّد إذن إعادة الاستخدام.",
+    },
+    openFilters: { en: "Filter and search", ar: "تصفية وبحث" },
+    closeFilters: { en: "Close", ar: "إغلاق" },
   },
   product: {
     breadcrumbHome: { en: "Home", ar: "الرئيسية" },
-    breadcrumbProducts: { en: "All Products", ar: "كل المنتجات" },
-    gallery: { en: "Product images", ar: "صور المنتج" },
-    placeholderPhoto: {
-      en: "Photograph not supplied",
+    breadcrumbProducts: { en: "Products", ar: "المنتجات" },
+    gallery: { en: "Product image", ar: "صورة المنتج" },
+    imageUnavailable: {
+      en: "Image unavailable",
       ar: "الصورة غير متوفرة",
     },
   },
+  cart: {
+    label: { en: "Cart", ar: "السلة" },
+    open: { en: "Open cart", ar: "افتح السلة" },
+    close: { en: "Close", ar: "إغلاق" },
+    add: { en: "Add to cart", ar: "أضف إلى السلة" },
+    inCart: { en: "In cart", ar: "في السلة" },
+    empty: { en: "Your cart is empty.", ar: "السلة فارغة." },
+    continue: { en: "Continue browsing", ar: "متابعة التصفح" },
+    remove: { en: "Remove", ar: "إزالة" },
+    decrease: { en: "Decrease quantity", ar: "أنقص الكمية" },
+    increase: { en: "Increase quantity", ar: "زِد الكمية" },
+    subtotal: { en: "Subtotal", ar: "المجموع" },
+    note: {
+      en: "Demonstration cart. Nothing is charged and no order is sent.",
+      ar: "سلة للعرض. لا يوجد دفع ولا يُرسَل طلب.",
+    },
+  },
   aboutPage: {
-    eyebrow: { en: "About & contact", ar: "عن المتجر والتواصل" },
-    heading: { en: "Visit the shop, WhatsApp, or Instagram", ar: "زر المتجر أو راسلنا على واتساب وإنستغرام" },
+    eyebrow: { en: "About", ar: "عن المؤسسة" },
+    heading: {
+      en: "Mayar Force, hunt and honey",
+      ar: "مؤسسة ميار فورس، للصيد والعسل",
+    },
     paragraphs: {
       en: [
-        "Issawi Hunting Store is in Saida, Lebanon. We present Radikal and Aselkon hunting shotguns and BME and Saga cartridges from the shop floor.",
-        "Message us on WhatsApp at 03 719 756, follow the shop on Instagram, or open the location in Google Maps.",
+        "Mayar Force offers hunting clothing, camping accessories, lighting, and honey from Akkar, at Al-Dawsa on the Halba–Qobayat road.",
+        "The person behind the business appears on the TikTok page. This site is a demonstration catalog: the prices are sample figures, and the cart does not take payment.",
       ],
       ar: [
-        "متجر العيسوي للصيد في صيدا، لبنان. نقدّم بنادق صيد راديكال وأسلكون وخراطيش BME وSaga من أرضية المتجر.",
-        "راسلنا على واتساب على 03 719 756، تابع المتجر على إنستغرام، أو افتح الموقع في خرائط Google.",
+        "تقدّم مؤسسة ميار فورس ملابس الصيد ولوازم التخييم والإضاءة والعسل من عكار، في الدوسة على طريق عام حلبا–القبيات.",
+        "صاحب المؤسسة يظهر في صفحة تيك توك. هذا الموقع كتالوج للعرض: الأسعار أرقام عيّنة، والسلة لا تستلم دفعًا.",
       ],
     },
   },
   footer: {
     en: {
-      blurb: "A hunting shop in Saida. Radikal and Aselkon shotguns, BME and Saga cartridges, from the floor of the store.",
-      copyright: "© 2026 Issawi Hunting Store",
+      blurb: "Hunting clothing, camping accessories, and honey from Akkar.",
+      copyright: "© 2026 Mayar Force",
+      categories: "Categories",
       explore: "Explore",
       visit: "Visit",
-      visitHint: "Ask on WhatsApp, follow the shop on Instagram, or open the map in Saida.",
-      credit: "Built by Roytech",
+      demo: "Demonstration website",
     },
     ar: {
-      blurb: "محل صيد في صيدا. بنادق راديكال وأسلكون، وخراطيش BME وSaga، من أرضية المتجر.",
-      copyright: "© 2026 متجر العيسوي للصيد",
-      explore: "استكشف",
-      visit: "زورونا",
-      visitHint: "اسأل على واتساب، تابع المتجر على إنستغرام، أو افتح الموقع في صيدا.",
-      credit: "من تنفيذ Roytech",
+      blurb: "ملابس صيد، لوازم تخييم وعسل من عكار.",
+      copyright: "© 2026 مؤسسة ميار فورس",
+      categories: "الأقسام",
+      explore: "تصفّح",
+      visit: "الزيارة",
+      demo: "موقع عرض تجريبي",
     },
   },
 } as const;
 
-export const navItems: { key: NavKey; match: (pathname: string, locale: Locale) => boolean }[] = [
-  { key: "home", match: (pathname, locale) => pathname === `/${locale}` || pathname === `/${locale}/` },
-  { key: "products", match: (pathname, locale) => pathname.startsWith(`/${locale}/products`) },
-  { key: "radikal", match: (pathname, locale) => pathname.startsWith(`/${locale}/brands/radikal`) },
-  { key: "aselkon", match: (pathname, locale) => pathname.startsWith(`/${locale}/brands/aselkon`) },
-  { key: "bme", match: (pathname, locale) => pathname.startsWith(`/${locale}/brands/bme`) },
-  { key: "saga", match: (pathname, locale) => pathname.startsWith(`/${locale}/brands/saga`) },
-  { key: "about", match: (pathname, locale) => pathname.startsWith(`/${locale}/about`) },
+export const navItems: { key: NavKey; match: (pathname: string, locale: Locale, hash: string) => boolean }[] = [
+  {
+    key: "home",
+    match: (pathname, locale) => pathname === `/${locale}` || pathname === `/${locale}/`,
+  },
+  {
+    key: "products",
+    match: (pathname, locale) =>
+      pathname.startsWith(`/${locale}/products`) || pathname.startsWith(`/${locale}/categories`),
+  },
+  {
+    key: "about",
+    match: (pathname, locale, hash) => pathname.startsWith(`/${locale}/about`) && hash !== "#contact",
+  },
+  {
+    key: "contact",
+    match: (pathname, locale, hash) => pathname.startsWith(`/${locale}/about`) && hash === "#contact",
+  },
 ];
 
 export function navHref(key: NavKey, locale: Locale) {
@@ -267,33 +333,9 @@ export function navHref(key: NavKey, locale: Locale) {
       return `/${locale}`;
     case "products":
       return `/${locale}/products`;
-    case "radikal":
-      return `/${locale}/brands/radikal`;
-    case "aselkon":
-      return `/${locale}/brands/aselkon`;
-    case "bme":
-      return `/${locale}/brands/bme`;
-    case "saga":
-      return `/${locale}/brands/saga`;
     case "about":
       return `/${locale}/about`;
+    case "contact":
+      return `/${locale}/about#contact`;
   }
 }
-
-export const editorNotes = {
-  assets:
-    "The Issawi shield mark is the store-supplied logo. Shotgun photos are manufacturer images. Cartridge photos are official BME and Saga product media downloaded locally.",
-  contact: {
-    phone: "03719756",
-    whatsapp: "https://wa.me/9613719756",
-    email: null,
-    address: "https://maps.app.goo.gl/oM9GtK57o4m41CWK8",
-    hours: null,
-    instagram: "https://www.instagram.com/issawihuntingstores/",
-  },
-  brands:
-    "Spellings are Aselkon, Radikal, BME, and Saga. Do not claim authorized dealership status. Confirm which models and cartridge loads are in stock before promising a specific piece.",
-} as const;
-
-export type HomeCategory = (typeof siteContent.categories.items)[number];
-export type { BrandId, CategoryId };

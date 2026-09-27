@@ -38,6 +38,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
         source={products}
         query={query}
         basePath={productsPath(locale)}
+        demo
         crumbs={[
           { href: homePath(locale), label: siteContent.product.breadcrumbHome[locale] },
           { label: siteContent.catalog.allHeading[locale] },

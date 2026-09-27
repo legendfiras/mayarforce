@@ -1,36 +1,46 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { Figtree, IBM_Plex_Sans_Arabic } from "next/font/google";
+import { Cairo, Outfit } from "next/font/google";
 import { headers } from "next/headers";
-import { dirFor, isLocale, type Locale } from "@/i18n";
+import { defaultLocale, dirFor, isLocale, type Locale } from "@/i18n";
 import { siteContent } from "@/content/site";
 import "./globals.css";
 
-const figtree = Figtree({
+const outfit = Outfit({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-figtree",
+  variable: "--font-outfit",
   display: "swap",
 });
 
-const ibmArabic = IBM_Plex_Sans_Arabic({
-  subsets: ["arabic"],
+const cairo = Cairo({
+  subsets: ["arabic", "latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-ibm-arabic",
+  variable: "--font-cairo",
   display: "swap",
 });
 
 export const viewport: Viewport = {
-  themeColor: "#1e3d32",
+  themeColor: "#101612",
 };
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
-  title: siteContent.meta.en.title,
-  description: siteContent.meta.en.description,
-  applicationName: "Issawi Hunting Store",
-  authors: [{ name: "Issawi Hunting Store" }],
-  robots: { index: true, follow: true },
+  title: siteContent.meta.ar.title,
+  description: siteContent.meta.ar.description,
+  applicationName: "Mayar Force",
+  authors: [{ name: "Mayar Force" }],
+  robots: { index: false, follow: false },
+  icons: {
+    icon: [
+      { url: "/images/mayar/favicon-16.png", sizes: "16x16", type: "image/png" },
+      { url: "/images/mayar/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/images/mayar/favicon-48.png", sizes: "48x48", type: "image/png" },
+      { url: "/images/mayar/favicon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/images/mayar/favicon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/images/mayar/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
 };
 
 export default async function RootLayout({
@@ -39,14 +49,15 @@ export default async function RootLayout({
   children: ReactNode;
 }>) {
   const headerList = await headers();
-  const raw = headerList.get("x-locale") ?? "en";
-  const locale: Locale = isLocale(raw) ? raw : "en";
+  const raw = headerList.get("x-locale") ?? defaultLocale;
+  const locale: Locale = isLocale(raw) ? raw : defaultLocale;
 
   return (
     <html
       lang={locale}
       dir={dirFor(locale)}
-      className={`${figtree.variable} ${ibmArabic.variable} h-full antialiased`}
+      className={`${outfit.variable} ${cairo.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
     >
       <body className="min-h-full bg-ivory text-charcoal">{children}</body>
     </html>

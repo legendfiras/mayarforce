@@ -4,11 +4,10 @@ import { useEffect, useId, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import type { Locale } from "@/i18n";
 import { siteContent } from "@/content/site";
-import { brandCopy, brandIds, categoryCopy, categoryIds } from "@/content/products";
+import { categoryCopy, categoryIds } from "@/content/products";
 
 export type FilterState = {
   q: string;
-  brand: string;
   category: string;
 };
 
@@ -17,7 +16,6 @@ type CatalogFiltersProps = {
   basePath: string;
   value: FilterState;
   resultCount: number;
-  hideBrand?: boolean;
   hideCategory?: boolean;
 };
 
@@ -26,7 +24,6 @@ export function CatalogFilters({
   basePath,
   value,
   resultCount,
-  hideBrand = false,
   hideCategory = false,
 }: CatalogFiltersProps) {
   const [open, setOpen] = useState(false);
@@ -64,10 +61,10 @@ export function CatalogFilters({
 
       <aside className="hidden lg:block">
         <FilterForm
+          key={`${value.q}|${value.category}`}
           locale={locale}
           basePath={basePath}
           value={value}
-          hideBrand={hideBrand}
           hideCategory={hideCategory}
         />
       </aside>
@@ -82,11 +79,11 @@ export function CatalogFilters({
       >
         <button
           type="button"
-          className="absolute inset-0 bg-charcoal/40"
+          className="absolute inset-0 bg-charcoal/50"
           aria-label={copy.closeFilters[locale]}
           onClick={() => setOpen(false)}
         />
-        <div className="absolute inset-y-0 start-0 w-[min(100%,20rem)] overflow-y-auto bg-white p-5 shadow-xl">
+        <div className="absolute inset-y-0 start-0 w-[min(100%,22rem)] overflow-y-auto bg-ivory p-5">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-semibold">{copy.filters[locale]}</h2>
             <button
@@ -98,10 +95,10 @@ export function CatalogFilters({
             </button>
           </div>
           <FilterForm
+            key={`${value.q}|${value.category}|sheet`}
             locale={locale}
             basePath={basePath}
             value={value}
-            hideBrand={hideBrand}
             hideCategory={hideCategory}
             onSubmitted={() => setOpen(false)}
           />
@@ -115,30 +112,15 @@ type FilterFormProps = Omit<CatalogFiltersProps, "resultCount"> & {
   onSubmitted?: () => void;
 };
 
-function FilterForm({
-  locale,
-  basePath,
-  value,
-  hideBrand,
-  hideCategory,
-  onSubmitted,
-}: FilterFormProps) {
+function FilterForm({ locale, basePath, value, hideCategory, onSubmitted }: FilterFormProps) {
   const router = useRouter();
   const copy = siteContent.catalog;
   const [q, setQ] = useState(value.q);
-  const [brand, setBrand] = useState(value.brand);
   const [category, setCategory] = useState(value.category);
-
-  useEffect(() => {
-    setQ(value.q);
-    setBrand(value.brand);
-    setCategory(value.category);
-  }, [value.q, value.brand, value.category]);
 
   function apply(next: FilterState) {
     const params = new URLSearchParams();
     if (next.q) params.set("q", next.q);
-    if (next.brand) params.set("brand", next.brand);
     if (next.category) params.set("category", next.category);
     const qs = params.toString();
     router.push(qs ? `${basePath}?${qs}` : basePath);
@@ -147,10 +129,10 @@ function FilterForm({
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    apply({ q, brand, category });
+    apply({ q, category });
   }
 
-  const hasActive = Boolean(value.q || value.brand || value.category);
+  const hasActive = Boolean(value.q || value.category);
 
   return (
     <form onSubmit={onSubmit} className="space-y-6">
@@ -163,32 +145,9 @@ function FilterForm({
           value={q}
           onChange={(event) => setQ(event.target.value)}
           placeholder={siteContent.header[locale].searchPlaceholder}
-          className="min-h-11 w-full border border-line bg-white px-3 text-sm outline-none focus:border-forest"
+          className="min-h-11 w-full border border-line bg-paper px-3 text-sm outline-none focus:border-forest"
         />
       </fieldset>
-
-      {hideBrand ? null : (
-        <fieldset>
-          <legend className="mb-2 text-sm font-semibold text-charcoal">{copy.brand[locale]}</legend>
-          <div className="space-y-2">
-            <FilterRadio
-              name="brand"
-              checked={brand === ""}
-              onChange={() => setBrand("")}
-              label={copy.allBrands[locale]}
-            />
-            {brandIds.map((id) => (
-              <FilterRadio
-                key={id}
-                name="brand"
-                checked={brand === id}
-                onChange={() => setBrand(id)}
-                label={brandCopy[id].name}
-              />
-            ))}
-          </div>
-        </fieldset>
-      )}
 
       {hideCategory ? null : (
         <fieldset>
@@ -226,9 +185,8 @@ function FilterForm({
             className="inline-flex min-h-11 items-center justify-center border border-line text-sm font-medium text-charcoal hover:border-forest"
             onClick={() => {
               setQ("");
-              setBrand("");
               setCategory("");
-              apply({ q: "", brand: "", category: "" });
+              apply({ q: "", category: "" });
             }}
           >
             {copy.clear[locale]}
@@ -251,14 +209,8 @@ function FilterRadio({
   label: string;
 }) {
   return (
-    <label className="flex cursor-pointer items-center gap-2 text-sm text-charcoal">
-      <input
-        type="radio"
-        name={name}
-        checked={checked}
-        onChange={onChange}
-        className="size-4 accent-forest"
-      />
+    <label className="flex min-h-11 cursor-pointer items-center gap-2 text-sm text-charcoal">
+      <input type="radio" name={name} checked={checked} onChange={onChange} className="size-4 accent-forest" />
       {label}
     </label>
   );

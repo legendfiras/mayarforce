@@ -5,7 +5,8 @@ import { useState } from "react";
 import type { Locale } from "@/i18n";
 import type { Product } from "@/content/products";
 import { siteContent } from "@/content/site";
-import { PlaceholderArt } from "@/components/PlaceholderArt";
+import { hasText } from "@/lib/text";
+import { ImageUnavailable } from "@/components/ProductImage";
 
 type ProductGalleryProps = {
   product: Product;
@@ -13,17 +14,12 @@ type ProductGalleryProps = {
 };
 
 export function ProductGallery({ product, locale }: ProductGalleryProps) {
-  const images = product.images.length > 0 ? product.images : [""];
+  const images = product.images.filter((src) => hasText(src));
   const [active, setActive] = useState(0);
   const current = images[active] ?? images[0];
-
   return (
     <div>
-      <div
-        className="relative aspect-square border border-line bg-[#f6f3ec]"
-        role="img"
-        aria-label={siteContent.product.gallery[locale]}
-      >
+      <div className="relative aspect-[4/5] overflow-hidden bg-ivory">
         {current ? (
           <Image
             src={current}
@@ -31,13 +27,10 @@ export function ProductGallery({ product, locale }: ProductGalleryProps) {
             fill
             priority
             sizes="(min-width: 1024px) 45vw, 100vw"
-            className="object-contain p-6"
+            className="object-contain"
           />
         ) : (
-          <div className="flex h-full flex-col">
-            <PlaceholderArt kind={product.placeholder} />
-            <p className="sr-only">{siteContent.product.placeholderPhoto[locale]}</p>
-          </div>
+          <ImageUnavailable label={siteContent.product.imageUnavailable[locale]} />
         )}
       </div>
       {images.length > 1 ? (
@@ -48,16 +41,12 @@ export function ProductGallery({ product, locale }: ProductGalleryProps) {
                 type="button"
                 onClick={() => setActive(index)}
                 aria-current={index === active}
-                className={`relative aspect-square w-full border bg-[#f6f3ec] ${
-                  index === active ? "border-forest" : "border-line"
+                aria-label={`${product.name[locale]} ${index + 1}`}
+                className={`relative aspect-[4/5] w-full overflow-hidden bg-[#0c0c0c] ${
+                  index === active ? "ring-2 ring-gold ring-offset-2 ring-offset-ivory" : ""
                 }`}
               >
-                <span className="sr-only">{`${product.name[locale]} ${index + 1}`}</span>
-                {src ? (
-                  <Image src={src} alt="" fill sizes="120px" className="object-contain p-2" />
-                ) : (
-                  <PlaceholderArt kind={product.placeholder} />
-                )}
+                <Image src={src} alt="" fill sizes="120px" className="object-contain" />
               </button>
             </li>
           ))}
